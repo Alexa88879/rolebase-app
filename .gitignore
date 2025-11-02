@@ -20,7 +20,7 @@ public/firebase-config.js
 
 # Firebase project files (can contain sensitive info)
 # Uncomment these if you want to ignore them:
-# firebase.json
+#firebase.json
 # firestore.rules
 # firestore.indexes.json
 
