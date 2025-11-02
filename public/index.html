@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Role-Based Authentication</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .container {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            color: #333;
+            margin-bottom: 0.5rem;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #333;
+            font-weight: 500;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e1e1e1;
+            border-radius: 5px;
+            font-size: 1rem;
+            transition: border-color 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 0.75rem;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 1rem;
+        }
+
+        .btn:hover {
+            background: #5a67d8;
+        }
+
+        .btn-secondary {
+            background: #6c757d;
+        }
+
+        .btn-secondary:hover {
+            background: #5a6268;
+        }
+
+        .btn-danger {
+            background: #dc3545;
+        }
+
+        .btn-danger:hover {
+            background: #c82333;
+        }
+
+        .message {
+            padding: 0.75rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .section {
+            display: none;
+        }
+
+        .section.active {
+            display: block;
+        }
+
+        .nav-links {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .nav-links a {
+            color: #667eea;
+            text-decoration: none;
+            margin: 0 1rem;
+        }
+
+        .nav-links a:hover {
+            text-decoration: underline;
+        }
+
+        .user-info {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 5px;
+            margin-bottom: 1rem;
+        }
+
+        .users-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .users-table th,
+        .users-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e1e1e1;
+        }
+
+        .users-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="message" class="message hidden"></div>
+
+        <!-- Login Section -->
+        <div id="loginSection" class="section active">
+            <div class="header">
+                <h1>Login</h1>
+                <p>Enter your credentials to access the system</p>
+            </div>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit" class="btn">Login</button>
+            </form>
+            <div class="nav-links">
+                <a href="#" onclick="showSection('registerSection')">Don't have an account? Register</a>
+            </div>
+        </div>
+
+        <!-- Register Section -->
+        <div id="registerSection" class="section">
+            <div class="header">
+                <h1>Register</h1>
+                <p>Create a new account</p>
+                <small style="color: #666; display: block; margin-top: 0.5rem;">
+                    💡 Use <strong>admin@rolebase.com</strong> to create an admin account
+                </small>
+            </div>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerEmail">Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmPassword">Confirm Password:</label>
+                    <input type="password" id="confirmPassword" required minlength="6">
+                </div>
+                <button type="submit" class="btn">Register</button>
+            </form>
+            <div class="nav-links">
+                <a href="#" onclick="showSection('loginSection')">Already have an account? Login</a>
+            </div>
+        </div>
+
+        <!-- Welcome Section -->
+        <div id="welcomeSection" class="section">
+            <div class="header">
+                <h1>Welcome</h1>
+                <p>You are successfully logged in</p>
+            </div>
+            <div class="user-info">
+                <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                <p><strong>Role:</strong> <span id="userRole"></span></p>
+            </div>
+            <button onclick="showSection('changePasswordSection')" class="btn btn-secondary">Change Password</button>
+            <button id="adminBtn" onclick="showSection('adminSection')" class="btn hidden">Admin Panel</button>
+            <button onclick="logout()" class="btn btn-danger">Logout</button>
+        </div>
+
+        <!-- Change Password Section -->
+        <div id="changePasswordSection" class="section">
+            <div class="header">
+                <h1>Change Password</h1>
+                <p>Update your account password</p>
+            </div>
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="currentPassword">Current Password:</label>
+                    <input type="password" id="currentPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPassword">New Password:</label>
+                    <input type="password" id="newPassword" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Confirm New Password:</label>
+                    <input type="password" id="confirmNewPassword" required minlength="6">
+                </div>
+                <button type="submit" class="btn">Change Password</button>
+                <button type="button" onclick="showSection('welcomeSection')" class="btn btn-secondary">Back</button>
+            </form>
+        </div>
+
+        <!-- Admin Section -->
+        <div id="adminSection" class="section">
+            <div class="header">
+                <h1>Admin Panel</h1>
+                <p>Manage users and system settings</p>
+            </div>
+            
+            <h3>Create New User</h3>
+            <form id="createUserForm">
+                <div class="form-group">
+                    <label for="newUserEmail">Email:</label>
+                    <input type="email" id="newUserEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="newUserPassword">Password:</label>
+                    <input type="password" id="newUserPassword" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="newUserRole">Role:</label>
+                    <select id="newUserRole" required>
+                        <option value="student">Student</option>
+                        <option value="admin">Admin</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn">Create User</button>
+            </form>
+
+            <h3>All Users</h3>
+            <table class="users-table">
+                <thead>
+                    <tr>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="usersTableBody">
+                    <!-- Users will be loaded here -->
+                </tbody>
+            </table>
+
+            <button onclick="showSection('welcomeSection')" class="btn btn-secondary" style="margin-top: 1rem;">Back to Dashboard</button>
+        </div>
+    </div>
+
+    <!-- Firebase SDKs -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyAt04I4OIfjIkwAepOL3Ix9tjAVViudc_0",
+            authDomain: "water-level-monitoring-818d3.firebaseapp.com",
+            projectId: "water-level-monitoring-818d3",
+            storageBucket: "water-level-monitoring-818d3.firebasestorage.app",
+            messagingSenderId: "314854252819",
+            appId: "1:314854252819:web:733e54c5ae0f36acfdbae6"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        let currentUser = null;
+
+        // Initialize auth state listener
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                const userDoc = await db.collection('users').doc(user.uid).get();
+                const userData = userDoc.data();
+                
+                document.getElementById('userEmail').textContent = user.email;
+                document.getElementById('userRole').textContent = userData?.role || 'student';
+                
+                // Show admin button only for admin users
+                if (userData?.role === 'admin') {
+                    document.getElementById('adminBtn').classList.remove('hidden');
+                } else {
+                    document.getElementById('adminBtn').classList.add('hidden');
+                }
+                
+                showSection('welcomeSection');
+            } else {
+                currentUser = null;
+                // Hide admin button when logged out
+                document.getElementById('adminBtn').classList.add('hidden');
+                showSection('loginSection');
+            }
+        });
+
+        // Show message function
+        function showMessage(message, type = 'error') {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = message;
+            messageDiv.className = `message ${type}`;
+            messageDiv.classList.remove('hidden');
+            
+            setTimeout(() => {
+                messageDiv.classList.add('hidden');
+            }, 5000);
+        }
+        
+        // Make showMessage available globally
+        window.showMessage = showMessage;
+
+        // Show section function with admin check
+        function showSection(sectionId) {
+            // Check if trying to access admin section
+            if (sectionId === 'adminSection') {
+                // Only allow admin users to access admin section
+                if (!currentUser) {
+                    showMessage('Please login first', 'error');
+                    return;
+                }
+                
+                // Check user role
+                db.collection('users').doc(currentUser.uid).get().then((doc) => {
+                    const userData = doc.data();
+                    if (userData?.role !== 'admin') {
+                        showMessage('Access denied. Admin privileges required.', 'error');
+                        return;
+                    }
+                    
+                    // User is admin, show admin section and load users
+                    document.querySelectorAll('.section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    document.getElementById(sectionId).classList.add('active');
+                    loadUsers();
+                });
+                return;
+            }
+            
+            // For non-admin sections, show normally
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        // Make showSection available globally
+        window.showSection = showSection;
+
+        // Login form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+                showMessage('Login successful!', 'success');
+            } catch (error) {
+                showMessage('Login failed: ' + error.message);
+            }
+        });
+
+        // Register form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                showMessage('Passwords do not match');
+                return;
+            }
+
+            try {
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // Check if this should be the first admin user
+                let role = 'student';
+                if (email.toLowerCase() === 'admin@rolebase.com') {
+                    role = 'admin';
+                }
+                
+                // Create user document in Firestore
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    email: email,
+                    role: role,
+                    createdAt: new Date()
+                });
+                
+                showMessage(`Registration successful! ${role === 'admin' ? 'Admin account created.' : ''}`, 'success');
+            } catch (error) {
+                showMessage('Registration failed: ' + error.message);
+            }
+        });
+
+        // Change password form
+        document.getElementById('changePasswordForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const currentPassword = document.getElementById('currentPassword').value;
+            const newPassword = document.getElementById('newPassword').value;
+            const confirmNewPassword = document.getElementById('confirmNewPassword').value;
+
+            if (newPassword !== confirmNewPassword) {
+                showMessage('New passwords do not match');
+                return;
+            }
+
+            try {
+                const credential = firebase.auth.EmailAuthProvider.credential(currentUser.email, currentPassword);
+                await currentUser.reauthenticateWithCredential(credential);
+                await currentUser.updatePassword(newPassword);
+                
+                showMessage('Password changed successfully!', 'success');
+                document.getElementById('changePasswordForm').reset();
+                setTimeout(() => showSection('welcomeSection'), 2000);
+            } catch (error) {
+                showMessage('Failed to change password: ' + error.message);
+            }
+        });
+
+        // Create user form (admin only)
+        document.getElementById('createUserForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            try {
+                // Check if current user is admin
+                if (!currentUser) {
+                    showMessage('Authentication required', 'error');
+                    return;
+                }
+                
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                const userData = userDoc.data();
+                
+                if (userData?.role !== 'admin') {
+                    showMessage('Admin privileges required', 'error');
+                    return;
+                }
+                
+                const email = document.getElementById('newUserEmail').value;
+                const password = document.getElementById('newUserPassword').value;
+                const role = document.getElementById('newUserRole').value;
+
+                // Store current admin data for restoration
+                const adminEmail = currentUser.email;
+
+                // Create new user account
+                const userCredential = await auth.createUserWithEmailAndPassword(email, password);
+                
+                // Create user document in Firestore with assigned role
+                await db.collection('users').doc(userCredential.user.uid).set({
+                    email: email,
+                    role: role,
+                    createdAt: new Date()
+                });
+                
+                // Sign out the newly created user immediately
+                await auth.signOut();
+                
+                // Show success message
+                showMessage(`User created successfully! You will need to login again as admin.`, 'success');
+                document.getElementById('createUserForm').reset();
+                
+                // Redirect to login page after a short delay
+                setTimeout(() => {
+                    showSection('loginSection');
+                    showMessage('Please login again with your admin credentials', 'error');
+                }, 2000);
+                
+            } catch (error) {
+                showMessage('Failed to create user: ' + error.message);
+                console.error('User creation error:', error);
+            }
+        });
+
+        // Load users function (admin only)
+        async function loadUsers() {
+            try {
+                // Check if current user is admin
+                if (!currentUser) {
+                    showMessage('Authentication required', 'error');
+                    return;
+                }
+                
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                const userData = userDoc.data();
+                
+                if (userData?.role !== 'admin') {
+                    showMessage('Admin privileges required', 'error');
+                    return;
+                }
+                
+                // User is admin, proceed to load users
+                const querySnapshot = await db.collection('users').get();
+                const tbody = document.getElementById('usersTableBody');
+                tbody.innerHTML = '';
+                
+                querySnapshot.forEach((doc) => {
+                    const userData = doc.data();
+                    const row = tbody.insertRow();
+                    row.innerHTML = `
+                        <td>${userData.email}</td>
+                        <td>${userData.role}</td>
+                        <td>
+                            ${doc.id !== currentUser.uid ? 
+                                `<button onclick="deleteUser('${doc.id}')" class="btn btn-danger" style="width: auto; padding: 0.25rem 0.5rem; font-size: 0.8rem;">Delete</button>` : 
+                                '<span style="color: #999;">(You)</span>'
+                            }
+                        </td>
+                    `;
+                });
+            } catch (error) {
+                showMessage('Failed to load users: ' + error.message);
+            }
+        }
+
+        // Delete user function (admin only)
+        window.deleteUser = async function(userId) {
+            try {
+                // Check if current user is admin
+                if (!currentUser) {
+                    showMessage('Authentication required', 'error');
+                    return;
+                }
+                
+                const userDoc = await db.collection('users').doc(currentUser.uid).get();
+                const userData = userDoc.data();
+                
+                if (userData?.role !== 'admin') {
+                    showMessage('Admin privileges required', 'error');
+                    return;
+                }
+                
+                // Prevent admin from deleting themselves
+                if (userId === currentUser.uid) {
+                    showMessage('Cannot delete your own account', 'error');
+                    return;
+                }
+                
+                if (!confirm('Are you sure you want to delete this user?')) {
+                    return;
+                }
+
+                await db.collection('users').doc(userId).delete();
+                showMessage('User deleted successfully!', 'success');
+                loadUsers();
+            } catch (error) {
+                showMessage('Failed to delete user: ' + error.message);
+            }
+        };
+
+        // Logout function
+        window.logout = async function() {
+            try {
+                await auth.signOut();
+                showMessage('Logged out successfully!', 'success');
+            } catch (error) {
+                showMessage('Logout failed: ' + error.message);
+            }
+        };
+
+        // Initialize admin user (run once)
+        async function initializeAdmin() {
+            try {
+                const adminQuery = await db.collection('users').where('role', '==', 'admin').get();
+                
+                if (adminQuery.empty) {
+                    console.log('No admin user found. Create one by registering and then updating role to admin');
+                }
+            } catch (error) {
+                console.log('Error checking for admin user:', error);
+            }
+        }
+
+        initializeAdmin();
+    </script>
+</body>
+</html>
