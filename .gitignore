@@ -7,3 +7,28 @@ yarn-debug.log*
 yarn-error.log*
 package-lock.json
 yarn.lock
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+.firebaserc
+
+# Firebase config (contains sensitive API keys)  
+firebase-config.js
+public/firebase-config.js
+
+# Firebase project files (can contain sensitive info)
+# Uncomment these if you want to ignore them:
+# firebase.json
+# firestore.rules
+# firestore.indexes.json
+
+# Environment variables
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# OS generated files
+Thumbs.db

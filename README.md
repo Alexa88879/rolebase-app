@@ -4,6 +4,10 @@ Role-Based Access Control (RBAC) Web Application
 
 A secure web application with user authentication, role-based access control, and admin controls.
 
+## 🌐 Live Demo
+
+**Firebase Deployment:** https://water-level-monitoring-818d3.web.app
+
 ## Features
 
 - **User Authentication**: Secure login and logout functionality
@@ -17,34 +21,67 @@ A secure web application with user authentication, role-based access control, an
 
 ## Tech Stack
 
+### Local Development
 - **Backend**: Node.js, Express.js
 - **Database**: SQLite
 - **Authentication**: JWT (JSON Web Tokens)
 - **Password Hashing**: bcrypt
 - **Frontend**: HTML, CSS, JavaScript
 
+### Firebase Deployment
+- **Hosting**: Firebase Hosting
+- **Authentication**: Firebase Authentication
+- **Database**: Cloud Firestore
+- **Backend**: Firebase Cloud Functions
+- **Deployment**: Fully deployed on Firebase platform
+
 ## Installation
 
 1. Clone the repository:
 ```bash
 git clone <repository-url>
-cd Rbac
+cd  rolebase-app
 ```
 
-2. Install dependencies:
+2. **Configure Environment Variables** (Important for Security):
+```bash
+cp .env.example .env
+```
+Then edit `.env` file with your actual Firebase credentials and JWT secret.
+
+3. Install dependencies:
 ```bash
 npm install
 ```
 
-3. Start the server:
+4. Start the server:
 ```bash
 npm start
 ```
 
-4. Open your browser and navigate to:
+5. Open your browser and navigate to:
 ```
 http://localhost:3000
 ```
+
+## 🚀 Firebase Deployment
+
+This application is **fully deployed on Firebase** with the following services:
+
+- **🌐 Firebase Hosting**: Static web hosting with global CDN
+- **🔐 Firebase Authentication**: User authentication and session management  
+- **💾 Cloud Firestore**: NoSQL database for user data and roles
+- **⚡ Real-time Updates**: Live data synchronization
+- **🔒 Security Rules**: Server-side access control and validation
+
+**Live URL**: https://water-level-monitoring-818d3.web.app
+
+### Deployment Features:
+- ✅ Automatic HTTPS
+- ✅ Global CDN distribution
+- ✅ Scalable cloud infrastructure
+- ✅ Built-in security and authentication
+- ✅ Real-time database updates
 
 ## Default Admin Credentials
 
@@ -54,6 +91,26 @@ When the application starts for the first time, a default admin account is creat
 - **Password**: admin123
 
 **Important**: Change this password immediately after first login for security.
+
+## 🔒 Security Configuration
+
+### Environment Variables
+This project uses environment variables to protect sensitive information:
+
+- ❌ **Never commit** `.env` file to git
+- ✅ **Always use** `.env.example` as template
+- 🔑 **Required variables**:
+  - `JWT_SECRET`: Secret key for JWT token signing
+  - `FIREBASE_API_KEY`: Firebase project API key
+  - `FIREBASE_PROJECT_ID`: Firebase project identifier
+  - And other Firebase configuration values
+
+### Security Features
+- 🔐 Environment-based configuration
+- 🚫 Sensitive data excluded from git
+- 🛡️ JWT token authentication
+- 🔒 Role-based access control
+- 🔑 Password hashing with bcrypt
 
 ## Project Structure
 
@@ -146,6 +203,3 @@ To run in development mode:
 npm start
 ```
 
-## License
-
-ISC
