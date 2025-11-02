@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - RBAC System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container admin-container">
+    <div class="welcome-box">
+      <h1>Admin Panel</h1>
+      <div id="message"></div>
+      
+      <div class="admin-section">
+        <h2>Create New User</h2>
+        <form id="createUserForm">
+          <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required 
+                   pattern="[a-zA-Z0-9_]+" 
+                   title="Username can only contain letters, numbers, and underscores"
+                   minlength="3">
+          </div>
+          <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required minlength="6">
+          </div>
+          <div class="form-group">
+            <label for="role">Role:</label>
+            <select id="role" name="role" required>
+              <option value="student">Student</option>
+              <option value="admin">Admin</option>
+            </select>
+          </div>
+          <button type="submit">Create User</button>
+        </form>
+      </div>
+
+      <div class="admin-section">
+        <h2>All Users</h2>
+        <div id="usersTableContainer">
+          <table id="usersTable">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Username</th>
+                <th>Role</th>
+                <th>Created At</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="usersTableBody">
+              <!-- Users will be loaded here -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button onclick="window.location.href='/welcome'" class="btn-secondary">Back to Welcome</button>
+        <button onclick="logout()" class="btn-danger">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/admin.js"></script>
+</body>
+</html>

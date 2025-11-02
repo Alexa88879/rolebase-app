@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Welcome - RBAC System</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="container">
+    <div class="welcome-box">
+      <h1>Welcome, <span id="userName"></span>!</h1>
+      <div class="user-info">
+        <p><strong>Username:</strong> <span id="userUsername"></span></p>
+        <p><strong>Role:</strong> <span id="userRole"></span></p>
+      </div>
+      <div class="button-group">
+        <button onclick="window.location.href='/change-password'">Change Password</button>
+        <button id="adminBtn" class="hidden" onclick="window.location.href='/admin'">Admin Panel</button>
+        <button onclick="logout()" class="btn-danger">Logout</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/welcome.js"></script>
+</body>
+</html>
