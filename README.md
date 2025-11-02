@@ -6,7 +6,7 @@ A secure web application with user authentication, role-based access control, an
 
 ## 🌐 Live Demo
 
-**Firebase Deployment:** https://water-level-monitoring-818d3.web.app
+**Firebase Deployment:** [https://rolebas.web.app/]
 
 ## Features
 
@@ -74,7 +74,7 @@ This application is **fully deployed on Firebase** with the following services:
 - **⚡ Real-time Updates**: Live data synchronization
 - **🔒 Security Rules**: Server-side access control and validation
 
-**Live URL**: https://water-level-monitoring-818d3.web.app
+**Live URL**: https://rolebas.web.app/
 
 ### Deployment Features:
 - ✅ Automatic HTTPS
